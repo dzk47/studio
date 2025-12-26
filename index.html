@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -10,80 +11,74 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root { --nude: #FAF9F6; --gold: #C5A059; --charcoal: #1A1A1A; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--nude); color: var(--charcoal); scroll-behavior: smooth; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--nude); color: var(--charcoal); }
         h1, h2, h3 { font-family: 'Playfair Display', serif; }
-        .btn-gold { background: var(--gold); color: white; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .btn-gold:hover { background: #AD8B4A; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(197, 160, 89, 0.2); }
-        .glass { background: white; border: 1px solid rgba(197, 160, 89, 0.15); box-shadow: 0 15px 35px rgba(0,0,0,0.02); }
+        .btn-gold { background: var(--gold); color: white; transition: 0.4s; }
+        .btn-gold:hover { background: #AD8B4A; transform: translateY(-2px); shadow: 0 10px 20px rgba(197, 160, 89, 0.2); }
+        .glass { background: white; border: 1px solid rgba(197, 160, 89, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.02); }
         .card-service { border: 1px solid #f0f0f0; transition: 0.3s; cursor: pointer; border-radius: 1.5rem; background: white; }
-        .card-service.active { border-color: var(--gold); background: #fdfaf5; box-shadow: 0 8px 20px rgba(197, 160, 89, 0.08); }
-        .view-section { display: none; animation: fadeInUp 0.6s ease; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        input { border: 1px solid #e5e7eb !important; border-radius: 1rem !important; padding: 1rem !important; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--gold) !important; }
+        .card-service.active { border-color: var(--gold); background: #fdfaf5; }
+        .view-section { display: none; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        input { border: 1px solid #ddd !important; border-radius: 1rem !important; padding: 1rem !important; outline: none; }
     </style>
 </head>
 <body class="antialiased">
 
     <!-- NAV -->
     <nav class="p-8 flex justify-between items-center max-w-6xl mx-auto sticky top-0 z-50 backdrop-blur-md">
-        <div class="flex flex-col">
-            <span class="text-xs tracking-[0.4em] text-stone-400 uppercase font-bold">Studio</span>
-            <h1 class="italic text-2xl text-stone-900 leading-none">Kayrileyde Santos</h1>
-        </div>
-        <div class="flex items-center gap-4">
-            <button onclick="toggleAdmin()" class="w-10 h-10 rounded-full flex items-center justify-center border border-stone-200 hover:bg-white transition-all">
-                <i data-lucide="settings-2" class="text-stone-400 w-4 h-4"></i>
-            </button>
-        </div>
+        <h1 class="italic text-2xl text-stone-900 leading-none">Kayrileyde Santos</h1>
+        <button onclick="toggleAdmin()" class="w-10 h-10 rounded-full flex items-center justify-center border border-stone-200 hover:bg-white transition-all">
+            <i data-lucide="settings-2" class="text-stone-400 w-4 h-4"></i>
+        </button>
     </nav>
 
     <!-- [CLIENTE] -->
     <main id="view-cliente" class="view-section max-w-2xl mx-auto p-6 pb-24" style="display: block;">
         <header class="text-center py-16">
-            <h2 class="text-4xl lg:text-5xl font-light mb-4 text-stone-900 italic leading-tight">Sua beleza esculpida com excelência.</h2>
-            <p class="text-stone-400 text-[10px] uppercase tracking-[0.5em] font-bold">Sofisticação & Estilo</p>
+            <h2 class="text-4xl lg:text-5xl font-light mb-4 text-stone-900 italic leading-tight">Beleza esculpida com excelência.</h2>
+            <p class="text-stone-400 text-[10px] uppercase tracking-[0.5em] font-bold">Kayrileyde Santos Studio</p>
         </header>
 
         <div class="glass p-10 rounded-[3rem] mb-10">
-            <h3 class="font-bold text-xs uppercase tracking-widest text-stone-500 italic mb-8 border-b pb-4">Menu de Procedimentos</h3>
+            <h3 class="font-bold text-xs uppercase tracking-widest text-stone-500 italic mb-8 border-b pb-4">Escolha seus procedimentos</h3>
             <div id="services-grid" class="space-y-4">
                 <p class="text-center py-10 animate-pulse text-stone-300 italic">Conectando ao studio...</p>
             </div>
             
             <div id="total-bar" class="hidden mt-10 pt-8 border-t border-stone-100 flex justify-between items-end">
                 <div>
-                    <span class="text-[10px] font-bold uppercase text-stone-400 block mb-1">Total Selecionado</span>
+                    <span class="text-[10px] font-bold uppercase text-stone-400 block mb-1">Total Estimado</span>
                     <span id="display-total" class="text-3xl font-bold text-stone-900 italic tracking-tighter">R$ 0,00</span>
                 </div>
-                <button onclick="openForm()" class="btn-gold px-10 py-4 rounded-2xl font-bold uppercase text-[10px] tracking-widest shadow-xl">Continuar</button>
+                <button onclick="document.getElementById('form-booking').classList.remove('hidden'); document.getElementById('form-booking').scrollIntoView({behavior:'smooth'})" class="btn-gold px-10 py-4 rounded-2xl font-bold uppercase text-[10px] tracking-widest">Continuar</button>
             </div>
         </div>
 
         <section id="form-booking" class="hidden glass p-10 rounded-[3rem] mb-20">
             <div class="space-y-5">
                 <input type="text" id="c-name" placeholder="Seu nome completo" class="w-full">
-                <input type="tel" id="c-phone" placeholder="WhatsApp (DDD + Número)" class="w-full">
+                <input type="tel" id="c-phone" placeholder="Seu WhatsApp (Ex: 98985666351)" class="w-full">
                 <input type="date" id="c-date" class="w-full">
-                <button onclick="saveBooking()" class="w-full btn-gold py-5 rounded-2xl font-bold uppercase tracking-widest mt-4 shadow-2xl">Confirmar no WhatsApp</button>
+                <button onclick="saveBooking()" class="w-full btn-gold py-5 rounded-2xl font-bold uppercase tracking-widest shadow-xl">Confirmar no WhatsApp</button>
             </div>
         </section>
     </main>
 
-    <!-- [ADMIN DASHBOARD] -->
+    <!-- [ADMIN] -->
     <main id="view-admin" class="view-section max-w-6xl mx-auto p-6 pb-24 text-stone-800">
         <div class="flex justify-between items-center mb-12">
-            <h2 class="text-2xl font-bold italic">Dashboard Studio</h2>
+            <h2 class="text-2xl font-bold italic underline">Dashboard Administrativo</h2>
             <button onclick="toggleAdmin()" class="text-[10px] font-bold text-stone-400 uppercase border px-4 py-2 rounded-lg">Voltar</button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
             <div class="glass p-8 rounded-[2.5rem]">
-                <p class="text-stone-400 text-[10px] font-bold uppercase tracking-widest mb-2 italic underline">Faturamento Total</p>
+                <p class="text-stone-400 text-[10px] font-bold uppercase tracking-widest mb-2 italic">Faturamento Bruto</p>
                 <h3 id="stat-profit" class="text-4xl font-bold text-stone-900 tracking-tighter italic">R$ 0,00</h3>
             </div>
             <div class="glass p-8 rounded-[2.5rem] lg:col-span-2">
-                <p class="text-stone-400 text-[10px] font-bold uppercase mb-4 italic">Novo Serviço</p>
+                <p class="text-stone-400 text-[10px] font-bold uppercase mb-4 italic">Gerenciar Preços & Serviços</p>
                 <div class="flex gap-2">
                     <input type="text" id="add-s-name" placeholder="Nome" class="text-xs !p-3 flex-1">
                     <input type="text" id="add-s-price" placeholder="Preço" class="text-xs !p-3 w-24">
@@ -93,12 +88,18 @@
         </div>
 
         <div class="glass p-10 rounded-[3rem]">
-            <h3 class="font-bold text-xl mb-10 border-b pb-4 italic underline">Próximos Clientes</h3>
+            <h3 class="font-bold text-xl mb-10 border-b pb-4 italic underline">Agenda de Clientes</h3>
             <div id="admin-list" class="space-y-6"></div>
         </div>
     </main>
 
-    <script>
+    <script type="module">
+        // --- FIREBASE ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        const firebaseConfig = { apiKey: "AIzaSyB1DaTOer5_cZ-JT15FlZGapNV1nUDrhmE", authDomain: "acai-delibery.firebaseapp.com", projectId: "acai-delibery" };
+        initializeApp(firebaseConfig);
+
+        // --- SUPABASE ---
         const _URL = "https://rbhgxrcqqtxnzzyllqms.supabase.co";
         const _KEY = "sb_publishable_OH1hqvBo8vmj_qsvtjKZhQ_QKTg4mLg";
         const supabase = window.supabase.createClient(_URL, _KEY);
@@ -120,7 +121,7 @@
             servs.forEach(s => {
                 const el = document.createElement('div');
                 el.className = "card-service p-6 flex justify-between items-center transition-all";
-                el.innerHTML = `<span class="font-bold text-stone-700 text-lg leading-none">${s.nome}</span><span class="font-bold text-stone-400 italic">R$ ${s.preco}</span>`;
+                el.innerHTML = `<span class="font-bold text-stone-700">${s.nome}</span><span class="font-bold text-stone-400 italic">R$ ${s.preco}</span>`;
                 el.onclick = () => {
                     const idx = selected.findIndex(item => item.id === s.id);
                     if(idx > -1) { selected.splice(idx, 1); el.classList.remove('active'); }
@@ -132,8 +133,6 @@
                 grid.appendChild(el);
             });
         }
-
-        window.openForm = () => document.getElementById('form-booking').classList.toggle('hidden');
 
         window.saveBooking = async () => {
             const name = document.getElementById('c-name').value;
@@ -150,7 +149,7 @@
             }]);
 
             if(!error) {
-                const msg = `Olá Kayrileyde! Sou ${name}. Gostaria de agendar: ${names} para o dia ${date.split('-').reverse().join('/')}.`;
+                const msg = `Olá Kayrileyde! Sou ${name}. Gostaria de agendar: ${names} para o dia ${date}.`;
                 window.open(`https://wa.me/${studioCfg.whatsapp}?text=${encodeURIComponent(msg)}`);
                 location.reload();
             }
@@ -170,7 +169,7 @@
         async function loadDash() {
             const { data: agends } = await supabase.from('agendamentos').select('*').order('data', {ascending: false});
             const list = document.getElementById('admin-list');
-            list.innerHTML = agends.length ? '' : 'Sem agendamentos.';
+            list.innerHTML = '';
             let profit = 0;
             agends.forEach(a => {
                 profit += parseFloat(a.valor_total);
@@ -183,7 +182,7 @@
                         </div>
                         <div class="flex items-center gap-4">
                             <span class="font-bold text-2xl italic">R$ ${a.valor_total}</span>
-                            <button onclick="sendReminder('${a.cliente_whatsapp}', '${a.cliente_nome}')" class="btn-gold text-[9px] font-bold uppercase px-6 py-3 rounded-xl shadow-lg">Lembrar</button>
+                            <button onclick="sendReminder('${a.cliente_whatsapp}', '${a.cliente_nome}')" class="btn-gold text-[9px] font-bold uppercase px-6 py-3 rounded-xl">Lembrar Cliente</button>
                         </div>
                     </div>`;
             });
