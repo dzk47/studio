@@ -1,127 +1,133 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kayrileyde Santos | Master Studio</title>
+    <title>Kayrileyde Santos | Luxury Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root { --nude: #FAF9F6; --gold: #C5A059; --charcoal: #1A1A1A; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--nude); color: var(--charcoal); }
-        h1, h2, h3 { font-family: 'Playfair Display', serif; }
-        .btn-gold { background: var(--gold); color: white; transition: 0.3s; font-weight: bold; border-radius: 1rem; }
-        .glass { background: white; border: 1px solid rgba(197, 160, 89, 0.1); box-shadow: 0 15px 30px rgba(0,0,0,0.02); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--nude); color: var(--charcoal); scroll-behavior: smooth; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+        .btn-gold { background: var(--gold); color: white; transition: 0.4s; letter-spacing: 0.1em; font-weight: bold; }
+        .btn-gold:hover { background: #AD8B4A; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(197, 160, 89, 0.2); }
+        .glass { background: white; border: 1px solid rgba(197, 160, 89, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.02); }
         .card-service { border: 1px solid #f2f2f2; transition: 0.3s; cursor: pointer; border-radius: 1.2rem; background: white; padding: 1.5rem; }
         .card-service.active { border-color: var(--gold); background: #fdfaf5; transform: scale(1.02); }
         .view-section { display: none; }
-        .hour-pill { border: 1px solid #e5e7eb; padding: 10px; border-radius: 12px; text-align: center; cursor: pointer; background: white; font-weight: 600; font-size: 13px; }
+        .hour-pill { border: 1px solid #e5e7eb; padding: 12px; border-radius: 12px; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; background: white; }
         .hour-pill.selected { background: var(--gold); color: white; border-color: var(--gold); }
-        .hour-pill.disabled { background: #f9fafb; color: #d1d5db; cursor: not-allowed; text-decoration: line-through; }
+        .hour-pill.disabled { background: #f9fafb; color: #d1d5db; cursor: not-allowed; text-decoration: line-through; border-style: dashed; }
         .hour-pill.blocked { background: #fee2e2; color: #b91c1c; border-color: #fecaca; }
         input { border: 1px solid #e2e8f0 !important; border-radius: 1rem !important; padding: 1rem !important; outline: none; background: white !important; width: 100%; text-align: center; }
         .tab-btn.active { border-bottom: 3px solid var(--gold); color: var(--gold); font-weight: 800; }
+        .status-badge { font-size: 8px; padding: 2px 10px; border-radius: 30px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
     <!-- NAV -->
-    <nav class="p-4 flex justify-between items-center max-w-6xl mx-auto sticky top-0 z-50 backdrop-blur-md">
-        <h1 class="italic text-2xl text-stone-900 leading-none">Kayrileyde Santos</h1>
-        <button onclick="window.requestAdmin()" class="w-10 h-10 rounded-full flex items-center justify-center border border-stone-100 hover:bg-white transition-all shadow-sm">
-            <i data-lucide="shield-check" class="text-stone-400 w-4 h-4"></i>
+    <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto sticky top-0 z-50 backdrop-blur-xl">
+        <div class="flex flex-col">
+            <span class="text-[9px] tracking-[0.5em] text-stone-400 uppercase font-black">Luxury Studio</span>
+            <h1 class="italic text-2xl text-stone-900 font-medium leading-none">Kayrileyde Santos</h1>
+        </div>
+        <button onclick="window.requestAdmin()" class="w-12 h-12 rounded-2xl flex items-center justify-center border border-stone-100 hover:border-gold/50 transition-all bg-white shadow-sm">
+            <i data-lucide="settings" class="text-stone-400 w-5 h-5"></i>
         </button>
     </nav>
 
-    <!-- [CLIENTE] -->
+    <!-- [VIEW: CLIENTE] -->
     <main id="view-cliente" class="view-section max-w-2xl mx-auto p-6 pb-24">
-        <header class="text-center py-10">
-            <h2 class="text-4xl font-light mb-2 italic leading-tight">Agendamento de Luxo.</h2>
-            <p class="text-stone-400 text-[10px] uppercase tracking-[0.4em] font-bold italic">Sua beleza em mãos de mestre</p>
+        <header class="text-center py-20">
+            <h2 class="text-5xl lg:text-6xl font-light mb-6 italic leading-tight text-stone-900">Beleza esculpida.</h2>
+            <p class="text-stone-400 text-[11px] uppercase tracking-[0.6em] font-bold">Reserva Online VIP</p>
         </header>
 
-        <div class="glass p-8 rounded-[2.5rem] mb-12 shadow-sm">
+        <div class="glass p-10 rounded-[3rem] mb-12">
             <div id="services-grid" class="space-y-4"></div>
-            <div id="total-bar" class="hidden mt-10 pt-8 border-t flex justify-between items-center">
-                <span id="display-total" class="text-3xl font-bold text-stone-900 italic">R$ 0,00</span>
-                <button onclick="window.showStep2()" class="btn-gold px-10 py-4 uppercase text-[10px]">Escolher Data</button>
+            <div id="total-bar" class="hidden mt-10 pt-8 border-t flex flex-col sm:flex-row justify-between items-center gap-6">
+                <span id="display-total" class="text-4xl font-bold text-stone-900 italic tracking-tighter">R$ 0,00</span>
+                <button onclick="window.showStep2()" class="btn-gold px-12 py-5 rounded-2xl font-bold uppercase text-[11px] shadow-xl w-full sm:w-auto">Escolher Horário</button>
             </div>
         </div>
 
-        <section id="step-2" class="hidden glass p-10 rounded-[3rem] mb-12 text-center shadow-sm">
-            <input type="date" id="c-date" onchange="window.loadHours()">
-            <div id="hours-grid" class="grid grid-cols-3 gap-3 mt-10"></div>
+        <section id="step-2" class="hidden glass p-10 rounded-[3rem] mb-12 text-center">
+            <input type="date" id="c-date" class="w-full p-4 mb-10 text-center font-bold" onchange="window.loadHours()">
+            <div id="hours-grid" class="grid grid-cols-3 gap-4"></div>
         </section>
 
         <section id="step-3" class="hidden glass p-10 rounded-[3rem] mb-20 space-y-6 shadow-2xl">
             <input type="text" id="c-name" placeholder="Seu nome completo">
-            <input type="tel" id="c-phone" placeholder="Seu WhatsApp">
-            <button onclick="window.saveBooking()" class="w-full btn-gold py-6 text-sm uppercase tracking-widest">Confirmar Reserva</button>
+            <input type="tel" id="c-phone" placeholder="Seu WhatsApp (com DDD)">
+            <button onclick="window.saveBooking()" class="w-full btn-gold py-6 rounded-2xl font-bold uppercase text-[11px]">Finalizar Agendamento</button>
         </section>
 
-        <section class="p-12 glass rounded-[3.5rem] text-center border-gold/10">
-            <h4 class="text-2xl font-bold italic mb-4">Localização</h4>
-            <p id="display-address" class="text-stone-500 mb-6 italic"></p>
-            <a id="btn-maps" href="#" target="_blank" class="inline-flex items-center gap-3 bg-stone-900 text-white font-bold text-[10px] uppercase tracking-widest px-10 py-4 rounded-xl shadow-xl">Abrir GPS</a>
+        <section class="mt-20 p-12 glass rounded-[3.5rem] text-center border-gold/10">
+            <h4 class="text-3xl font-bold italic mb-4">Localização</h4>
+            <p id="display-address" class="text-stone-500 text-lg mb-8 italic"></p>
+            <a id="btn-maps" href="#" target="_blank" class="inline-flex items-center gap-3 bg-stone-900 text-white font-bold text-[11px] uppercase tracking-[0.2em] px-12 py-5 rounded-2xl shadow-xl hover:scale-95 transition-all">
+                <i data-lucide="navigation-2" class="w-4 h-4"></i> Abrir GPS
+            </a>
         </section>
     </main>
 
-    <!-- [ADMIN] -->
+    <!-- [VIEW: ADMIN DASHBOARD] -->
     <main id="view-admin" class="view-section max-w-6xl mx-auto p-6 pb-24">
         <div class="flex justify-between items-center mb-10">
-            <h2 class="text-3xl font-bold italic">Painel de Controle</h2>
-            <div class="flex gap-2">
-                <button onclick="window.setView('cliente')" class="text-[9px] font-bold text-stone-400 border px-3 py-2 rounded-xl">Ver Site</button>
-                <button onclick="window.logoutAdmin()" class="text-[9px] font-bold text-red-500 bg-red-50 border border-red-100 px-3 py-2 rounded-xl">Sair</button>
+            <h2 class="text-3xl font-bold italic">Dashboard Gestão</h2>
+            <div class="flex gap-4">
+                <button onclick="window.setView('cliente')" class="text-[10px] font-bold text-stone-400 border px-4 py-2 rounded-xl">Ver Site</button>
+                <button onclick="window.logoutAdmin()" class="text-[10px] font-bold text-red-500 border border-red-100 px-4 py-2 rounded-xl bg-red-50">Sair</button>
             </div>
         </div>
 
-        <div class="flex gap-4 mb-10 border-b overflow-x-auto">
-            <button onclick="window.showTab('agenda')" id="tab-agenda" class="tab-btn pb-4 text-xs font-bold active">AGENDA</button>
-            <button onclick="window.showTab('grade')" id="tab-grade" class="tab-btn pb-4 text-xs font-bold uppercase">Grade Horária</button>
-            <button onclick="window.showTab('servicos')" id="tab-servicos" class="tab-btn pb-4 text-xs font-bold">SERVIÇOS</button>
-            <button onclick="window.showTab('config')" id="tab-config" class="tab-btn pb-4 text-xs font-bold uppercase">Studio</button>
+        <div class="flex gap-8 mb-10 border-b overflow-x-auto">
+            <button onclick="window.showTab('agenda')" id="tab-agenda" class="tab-btn pb-4 text-xs font-bold uppercase active">Agenda</button>
+            <button onclick="window.showTab('grade')" id="tab-grade" class="tab-btn pb-4 text-xs font-bold uppercase">Bloquear Horários</button>
+            <button onclick="window.showTab('servicos')" id="tab-servicos" class="tab-btn pb-4 text-xs font-bold uppercase">Serviços</button>
+            <button onclick="window.showTab('studio')" id="tab-studio" class="tab-btn pb-4 text-xs font-bold uppercase">Configuração</button>
         </div>
 
         <!-- TAB: AGENDA -->
         <section id="content-agenda" class="tab-content">
-            <div class="glass p-8 rounded-[2rem] mb-10 text-center border-emerald-100">
-                <p class="text-stone-400 text-[10px] uppercase font-bold tracking-widest mb-1">Faturamento Real</p>
+            <div class="glass p-8 rounded-[2rem] mb-10 text-center border-emerald-100 shadow-sm">
+                <p class="text-stone-400 text-[10px] uppercase font-bold mb-1">Lucro Estimado</p>
                 <h3 id="stat-profit" class="text-5xl font-bold text-stone-900 tracking-tighter">R$ 0,00</h3>
             </div>
-            <div id="admin-list" class="space-y-4"></div>
+            <div id="admin-list" class="space-y-6"></div>
         </section>
 
-        <!-- TAB: GRADE HORÁRIA (MANIPULAR HORÁRIOS) -->
+        <!-- TAB: GRADE -->
         <section id="content-grade" class="tab-content hidden">
             <div class="glass p-10 rounded-[3rem] text-center">
-                <h4 class="font-bold mb-4 italic text-stone-500 uppercase text-xs">Bloqueio Manual de Horários</h4>
                 <input type="date" id="adm-grade-date" class="w-full mb-8" onchange="window.loadAdminGrade()">
                 <div id="admin-hours-grid" class="grid grid-cols-4 gap-3"></div>
-                <p class="mt-8 text-[10px] text-stone-400 italic font-medium">Toque num horário para Bloquear/Desbloquear o dia selecionado.</p>
             </div>
         </section>
 
         <!-- TAB: SERVIÇOS -->
         <section id="content-servicos" class="tab-content hidden">
-            <div class="glass p-8 rounded-[2rem] mb-6">
-                <div class="flex gap-2">
-                    <input type="text" id="add-s-name" placeholder="Nome do Procedimento" class="flex-1 text-sm">
-                    <input type="text" id="add-s-price" placeholder="R$ 0,00" class="w-24 text-sm">
-                    <button onclick="window.addService()" class="btn-gold px-6 rounded-xl uppercase text-[10px]">Adicionar</button>
+            <div class="glass p-10 rounded-[3rem] mb-10">
+                <div class="flex gap-4">
+                    <input type="text" id="add-s-name" placeholder="Serviço" class="flex-1">
+                    <input type="text" id="add-s-price" placeholder="Preço" class="w-32">
+                    <button onclick="window.addService()" class="btn-gold px-8 rounded-2xl font-bold text-xs uppercase">Salvar</button>
                 </div>
             </div>
-            <div id="admin-services-list" class="grid md:grid-cols-2 gap-3"></div>
+            <div id="admin-services-list" class="grid md:grid-cols-2 gap-4"></div>
         </section>
 
-        <!-- TAB: CONFIG -->
-        <section id="content-config" class="tab-content hidden">
+        <!-- TAB: CONFIGURAÇÃO -->
+        <section id="content-studio" class="tab-content hidden">
             <div class="glass p-10 rounded-[3rem] space-y-6">
                 <input type="text" id="adm-address" placeholder="Endereço">
                 <input type="text" id="adm-maps-link" placeholder="Link Google Maps">
-                <button onclick="window.updateStudio()" class="w-full btn-gold py-5 uppercase text-xs">Salvar Configurações</button>
+                <button onclick="window.updateStudioConfig()" class="w-full btn-gold py-5 rounded-2xl uppercase text-[10px]">Salvar Studio</button>
             </div>
         </section>
     </main>
@@ -135,40 +141,59 @@
         let selectedHour = null;
         let studioCfg = {};
 
-        // --- GLOBAL ACTIONS ---
-        window.setView = (v) => {
+        // INICIALIZAÇÃO
+        async function start() {
+            lucide.createIcons();
+            const { data } = await supabase.from('configs').select('*').single();
+            studioCfg = data;
+            
+            document.getElementById('display-address').innerText = studioCfg.endereco;
+            document.getElementById('btn-maps').href = studioCfg.link_maps;
+            
+            if (localStorage.getItem('studio_logged') === 'true') { toggleView('admin'); }
+            else { toggleView('cliente'); }
+
+            loadServices();
+            document.getElementById('c-date').min = new Date().toISOString().split('T')[0];
+        }
+
+        // VIEW LOGIC
+        window.setView = (view) => {
             document.querySelectorAll('.view-section').forEach(s => s.style.display = 'none');
-            document.getElementById(`view-${v}`).style.display = 'block';
-            if(v === 'admin') window.loadDash();
+            document.getElementById(`view-${view}`).style.display = 'block';
+            if(view === 'admin') window.loadDash();
         };
 
-        window.showTab = (t) => {
+        window.showTab = (tab) => {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`content-${t}`).classList.remove('hidden');
-            document.getElementById(`tab-${t}`).classList.add('active');
+            document.getElementById(`content-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            if(tab === 'studio') {
+                document.getElementById('adm-address').value = studioCfg.endereco;
+                document.getElementById('adm-maps-link').value = studioCfg.link_maps;
+            }
         };
 
-        // --- CLIENT LOGIC ---
+        // CLIENT ACTIONS
         window.loadServices = async () => {
             const { data: servs } = await supabase.from('servicos').select('*').order('nome');
             const grid = document.getElementById('services-grid');
             const adminList = document.getElementById('admin-services-list');
             grid.innerHTML = ''; adminList.innerHTML = '';
-
             servs?.forEach(s => {
-                grid.innerHTML += `<div onclick="window.toggleS('${s.id}', '${s.nome}', ${s.preco}, this)" class="card-service shadow-sm flex justify-between items-center"><span class="font-bold text-stone-800">${s.nome}</span><span class="font-bold text-stone-400 italic">R$ ${s.preco}</span></div>`;
-                adminList.innerHTML += `<div class="glass p-4 rounded-xl flex justify-between items-center text-sm font-semibold"><span>${s.nome}</span><span>R$ ${s.preco} <button onclick="window.delS('${s.id}')" class="ml-4 text-red-400 hover:scale-110">Excluir</button></span></div>`;
+                grid.innerHTML += `<div onclick="window.toggleS('${s.id}', '${s.nome}', ${s.preco}, this)" class="card-service shadow-sm flex justify-between items-center"><span class="font-bold text-stone-800 text-lg leading-none">${s.nome}</span><span class="font-bold text-stone-400 italic">R$ ${s.preco}</span></div>`;
+                adminList.innerHTML += `<div class="flex justify-between items-center glass p-6 rounded-2xl font-bold"><span>${s.nome}</span><span>R$ ${s.preco} <button onclick="window.delS('${s.id}')" class="ml-4 text-red-300"><i data-lucide="trash-2" class="w-4"></i></button></span></div>`;
             });
             lucide.createIcons();
         };
 
-        window.toggleS = (id, n, p, el) => {
-            const idx = selectedServices.findIndex(i => i.id === id);
+        window.toggleS = (id, nome, preco, el) => {
+            const idx = selectedServices.findIndex(item => item.id === id);
             if(idx > -1) { selectedServices.splice(idx, 1); el.classList.remove('active'); }
-            else { selectedServices.push({id, n, p}); el.classList.add('active'); }
-            const tot = selectedServices.reduce((a, b) => a + b.p, 0);
-            document.getElementById('display-total').innerText = `R$ ${tot.toFixed(2)}`;
+            else { selectedServices.push({id, nome, preco}); el.classList.add('active'); }
+            const total = selectedServices.reduce((acc, curr) => acc + curr.preco, 0);
+            document.getElementById('display-total').innerText = `R$ ${total.toFixed(2)}`;
             document.getElementById('total-bar').classList.toggle('hidden', selectedServices.length === 0);
         };
 
@@ -203,60 +228,22 @@
             const p = document.getElementById('c-phone').value;
             const d = document.getElementById('c-date').value;
             if(!n || !p || !selectedHour) return alert("Preencha tudo!");
-            const tot = selectedServices.reduce((a, b) => a + b.p, 0);
-            const servsNames = selectedServices.map(s => s.n).join(', ');
+            const total = selectedServices.reduce((a, b) => a + b.preco, 0);
+            const servs = selectedServices.map(s => s.nome).join(', ');
+            
             const { error } = await supabase.from('agendamentos').insert([{
-                cliente_nome: n, cliente_whatsapp: p, servicos_escolhidos: servsNames,
-                data: d, horario: selectedHour, valor_total: tot
+                cliente_nome: n, cliente_whatsapp: p, servicos_escolhidos: servs,
+                data: d, horario: selectedHour, valor_total: total
             }]);
+            
             if(!error) {
-                const msg = `💎 *AGENDAMENTO VIP - STUDIO KAYRILEYDE SANTOS* 💎\n\nOlá Kayrileyde! Sou *${n}* e agendei pelo site:\n\n🛠 *Serviços:* ${servsNames}\n📅 *Data:* ${d.split('-').reverse().join('/')}\n⏰ *Horário:* ${selectedHour}\n💰 *Total:* R$ ${tot.toFixed(2)}\n\n_Aguardo ansiosamente pela confirmação!_ ✨`;
+                const msg = `💎 *RESERVA VIP - KAYRILEYDE SANTOS* 💎\n\nOlá Kayrileyde! Sou *${n}* e reservei um momento especial pelo seu site.\n\n🛠 *Serviços:* ${servs}\n📅 *Data:* ${d.split('-').reverse().join('/')}\n⏰ *Horário:* ${selectedHour}\n💰 *Valor Total:* R$ ${total.toFixed(2)}\n\n_Pode confirmar minha vinda?_ ✨`;
                 window.open(`https://wa.me/${studioCfg.whatsapp}?text=${encodeURIComponent(msg)}`);
                 location.reload();
             }
         };
 
-        // --- ADMIN GRADE LOGIC ---
-        window.loadAdminGrade = async () => {
-            const date = document.getElementById('adm-grade-date').value;
-            const grid = document.getElementById('admin-hours-grid');
-            if(!date) return;
-            
-            const { data: booked } = await supabase.from('agendamentos').select('*').eq('data', date);
-            grid.innerHTML = '';
-            
-            for(let h = 8; h < 19; h++) {
-                ['00', '30'].forEach(m => {
-                    const hour = `${String(h).padStart(2,'0')}:${m}`;
-                    const appt = booked.find(b => b.horario === hour);
-                    const btn = document.createElement('div');
-                    
-                    btn.innerText = hour;
-                    if(appt) {
-                        btn.className = appt.status === 'Bloqueado' ? 'hour-pill blocked' : 'hour-pill disabled';
-                        btn.title = appt.cliente_nome;
-                        if(appt.status === 'Bloqueado') {
-                            btn.onclick = async () => {
-                                await supabase.from('agendamentos').delete().eq('id', appt.id);
-                                window.loadAdminGrade();
-                            };
-                        }
-                    } else {
-                        btn.className = 'hour-pill';
-                        btn.onclick = async () => {
-                            await supabase.from('agendamentos').insert([{
-                                cliente_nome: 'BLOQUEIO ADM', cliente_whatsapp: '0', servicos_escolhidos: 'Manual',
-                                data: date, horario: hour, valor_total: 0, status: 'Bloqueado'
-                            }]);
-                            window.loadAdminGrade();
-                        };
-                    }
-                    grid.appendChild(btn);
-                });
-            }
-        };
-
-        // --- ADMIN DASHBOARD ---
+        // ADMIN ACTIONS
         window.loadDash = async () => {
             const { data: agends } = await supabase.from('agendamentos').select('*').order('data', {ascending: false});
             const list = document.getElementById('admin-list');
@@ -264,20 +251,21 @@
             
             agends.forEach(a => {
                 if(a.status === 'Atendido') profit += parseFloat(a.valor_total);
-                if(a.status === 'Bloqueado') return; // Pula bloqueios no lucro e agenda principal
+                if(a.status === 'Bloqueado') return;
 
                 list.innerHTML += `
-                    <div class="glass p-6 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4">
-                        <div class="text-center md:text-left">
+                    <div class="glass p-8 rounded-[2.5rem] flex flex-col md:flex-row justify-between items-center gap-6 shadow-sm">
+                        <div>
                             <span class="status-badge ${a.status==='Atendido'?'bg-green-100 text-green-700':'bg-blue-100 text-blue-700'}">${a.status}</span>
-                            <h4 class="font-bold text-xl mt-2">${a.cliente_nome}</h4>
-                            <p class="text-xs text-stone-400 font-medium italic">${a.servicos_escolhidos} • ${a.data} • ${a.horario}</p>
+                            <h4 class="font-bold text-2xl mt-2">${a.cliente_nome}</h4>
+                            <p class="text-xs text-stone-400 italic">${a.servicos_escolhidos} • ${a.data} às ${a.horario}</p>
                         </div>
                         <div class="flex items-center gap-4">
-                            <span class="font-bold text-xl italic tracking-tighter">R$ ${a.valor_total}</span>
+                            <span class="font-bold text-xl italic">R$ ${a.valor_total}</span>
                             <div class="flex flex-col gap-1">
-                                <button onclick="window.upStat('${a.id}','Atendido')" class="text-[9px] bg-stone-900 text-white px-4 py-2 rounded-lg font-bold uppercase tracking-widest">Finalizar</button>
-                                <button onclick="window.upStat('${a.id}','Desmarcado')" class="text-[9px] border px-4 py-2 rounded-lg font-bold uppercase">Excluir</button>
+                                <button onclick="window.upStat('${a.id}','Atendido')" class="text-[9px] bg-green-600 text-white px-5 py-2 rounded-lg font-bold uppercase">Concluído</button>
+                                <button onclick="window.upStat('${a.id}','Desmarcado')" class="text-[9px] bg-red-100 text-red-600 px-5 py-2 rounded-lg font-bold uppercase">Excluir</button>
+                                <button onclick="window.sendVIPRemind('${a.cliente_whatsapp}', '${a.cliente_nome}', '${a.horario}', '${a.servicos_escolhidos}')" class="text-[9px] bg-stone-900 text-white px-5 py-2 rounded-lg font-bold uppercase shadow-xl">Enviar Lembrete</button>
                             </div>
                         </div>
                     </div>`;
@@ -285,40 +273,46 @@
             document.getElementById('stat-profit').innerText = `R$ ${profit.toFixed(2)}`;
         };
 
-        window.requestAdmin = () => {
-            if(localStorage.getItem('studio_logged') === 'true') window.setView('admin');
-            else if(prompt("Senha ADM:") === studioCfg.senha_adm) { localStorage.setItem('studio_logged', 'true'); window.setView('admin'); }
+        window.sendVIPRemind = (phone, name, hour, services) => {
+            const msg = `💎 *CONFIRMAÇÃO VIP - STUDIO KAYRILEYDE SANTOS* 💎\n\nOlá *${name}*! Tudo bem? ✨\nPassando para confirmar que seu momento de beleza está chegando!\n\n⏰ *Horário:* ${hour}\n🛠 *Procedimentos:* ${services}\n📍 *Local:* ${studioCfg.endereco}\n\nPodemos confirmar sua vinda para prepararmos tudo com excelência? ✨🥂`;
+            window.open(`https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`);
+        };
+
+        window.loadAdminGrade = async () => {
+            const date = document.getElementById('adm-grade-date').value;
+            const grid = document.getElementById('admin-hours-grid');
+            if(!date) return;
+            const { data: booked } = await supabase.from('agendamentos').select('*').eq('data', date);
+            grid.innerHTML = '';
+            for(let h = 8; h < 19; h++) {
+                ['00', '30'].forEach(m => {
+                    const hour = `${String(h).padStart(2,'0')}:${m}`;
+                    const appt = booked.find(b => b.horario === hour);
+                    const btn = document.createElement('div');
+                    btn.innerText = hour;
+                    if(appt) {
+                        btn.className = appt.status === 'Bloqueado' ? 'hour-pill blocked' : 'hour-pill disabled';
+                        if(appt.status === 'Bloqueado') btn.onclick = async () => { await supabase.from('agendamentos').delete().eq('id', appt.id); window.loadAdminGrade(); };
+                    } else {
+                        btn.className = 'hour-pill';
+                        btn.onclick = async () => { await supabase.from('agendamentos').insert([{ cliente_nome: 'BLOQUEIO ADM', cliente_whatsapp: '0', servicos_escolhidos: 'Manual', data: date, horario: hour, valor_total: 0, status: 'Bloqueado' }]); window.loadAdminGrade(); };
+                    }
+                    grid.appendChild(btn);
+                });
+            }
+        };
+
+        window.requestAdminAccess = () => {
+            if (localStorage.getItem('studio_logged') === 'true') { window.setView('admin'); }
+            else { if(prompt("Senha Administrativa:") === studioCfg.senha_adm) { localStorage.setItem('studio_logged', 'true'); window.setView('admin'); } }
         };
 
         window.logoutAdmin = () => { localStorage.removeItem('studio_logged'); location.reload(); };
         window.upStat = async (id, status) => { await supabase.from('agendamentos').update({ status }).eq('id', id); window.loadDash(); };
-        window.addService = async () => { 
-            const n = document.getElementById('add-s-name').value; 
-            const p = document.getElementById('add-s-price').value;
-            await supabase.from('servicos').insert([{ nome: n, preco: parseFloat(p) }]); 
-            location.reload(); 
-        };
-        window.delS = async (id) => { if(confirm("Apagar serviço?")) { await supabase.from('servicos').delete().eq('id', id); location.reload(); }};
-        window.updateStudio = async () => {
-            const endereco = document.getElementById('adm-address').value;
-            const link_maps = document.getElementById('adm-maps-link').value;
-            await supabase.from('configs').update({ endereco, link_maps }).eq('id', 1);
-            alert("Salvo!"); location.reload();
-        };
+        window.addService = async () => { const n = document.getElementById('add-s-name').value; const p = document.getElementById('add-s-price').value; await supabase.from('servicos').insert([{ nome: n, preco: parseFloat(p) }]); location.reload(); };
+        window.delS = async (id) => { if(confirm("Excluir?")) { await supabase.from('servicos').delete().eq('id', id); location.reload(); }};
+        window.updateStudioConfig = async () => { await supabase.from('configs').update({ endereco: document.getElementById('adm-address').value, link_maps: document.getElementById('adm-maps-link').value }).eq('id', 1); alert("Salvo!"); location.reload(); };
 
-        async function start() {
-            const { data } = await supabase.from('configs').select('*').single();
-            if(data) {
-                studioCfg = data;
-                document.getElementById('display-address').innerText = data.endereco;
-                document.getElementById('btn-maps').href = data.link_maps;
-                document.getElementById('adm-address').value = data.endereco;
-                document.getElementById('adm-maps-link').value = data.link_maps;
-                if (localStorage.getItem('studio_logged') === 'true') window.setView('admin');
-                else window.setView('cliente');
-                window.loadServices();
-            }
-        }
         start();
     </script>
 </body>
