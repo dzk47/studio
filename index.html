@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kayrileyde Santos | Luxury Management</title>
+    <title>Kayrileyde Santos | Studio de Luxo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -13,10 +13,10 @@
         :root { --nude: #FAF9F6; --gold: #C5A059; --charcoal: #1A1A1A; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--nude); color: var(--charcoal); scroll-behavior: smooth; }
         h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
-        .btn-gold { background: var(--gold); color: white; transition: 0.4s; letter-spacing: 0.1em; font-weight: bold; }
+        .btn-gold { background: var(--gold); color: white; transition: 0.4s; font-weight: bold; border-radius: 1rem; }
         .btn-gold:hover { background: #AD8B4A; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(197, 160, 89, 0.2); }
         .glass { background: white; border: 1px solid rgba(197, 160, 89, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.02); }
-        .card-service { border: 1px solid #f2f2f2; transition: 0.3s; cursor: pointer; border-radius: 1.2rem; background: white; padding: 1.5rem; }
+        .card-service { border: 1px solid #f2f2f2; transition: 0.3s; cursor: pointer; border-radius: 1.2rem; background: white; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
         .card-service.active { border-color: var(--gold); background: #fdfaf5; transform: scale(1.02); }
         .view-section { display: none; }
         .hour-pill { border: 1px solid #e5e7eb; padding: 12px; border-radius: 12px; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; background: white; }
@@ -36,81 +36,87 @@
             <span class="text-[9px] tracking-[0.5em] text-stone-400 uppercase font-black">Luxury Studio</span>
             <h1 class="italic text-2xl text-stone-900 font-medium leading-none">Kayrileyde Santos</h1>
         </div>
-        <button onclick="window.requestAdmin()" class="w-12 h-12 rounded-2xl flex items-center justify-center border border-stone-100 hover:border-gold/50 transition-all bg-white shadow-sm">
+        <button onclick="window.requestAdmin()" class="w-12 h-12 rounded-2xl flex items-center justify-center border border-stone-100 hover:bg-white transition-all shadow-sm">
             <i data-lucide="settings" class="text-stone-400 w-5 h-5"></i>
         </button>
     </nav>
 
-    <!-- [VIEW: CLIENTE] -->
+    <!-- [CLIENTE] -->
     <main id="view-cliente" class="view-section max-w-2xl mx-auto p-6 pb-24">
-        <header class="text-center py-20">
-            <h2 class="text-5xl lg:text-6xl font-light mb-6 italic leading-tight text-stone-900">Beleza esculpida.</h2>
-            <p class="text-stone-400 text-[11px] uppercase tracking-[0.6em] font-bold">Reserva Online VIP</p>
+        <header class="text-center py-16">
+            <h2 class="text-5xl lg:text-6xl font-light mb-4 italic leading-tight text-stone-900">Beleza esculpida.</h2>
+            <p id="slogan-text" class="text-stone-400 text-[10px] uppercase tracking-[0.6em] font-bold italic">Sua beleza em mãos de mestre</p>
         </header>
 
-        <div class="glass p-10 rounded-[3rem] mb-12">
-            <div id="services-grid" class="space-y-4"></div>
+        <div class="glass p-8 rounded-[2.5rem] mb-12 shadow-sm">
+            <h3 class="font-bold text-xs uppercase tracking-widest text-stone-500 mb-8 border-b pb-4 italic">1. Menu de Procedimentos</h3>
+            <div id="services-grid" class="space-y-4">
+                <p class="text-center py-20 text-stone-300 animate-pulse">Conectando ao banco de dados...</p>
+            </div>
+            
             <div id="total-bar" class="hidden mt-10 pt-8 border-t flex flex-col sm:flex-row justify-between items-center gap-6">
                 <span id="display-total" class="text-4xl font-bold text-stone-900 italic tracking-tighter">R$ 0,00</span>
-                <button onclick="window.showStep2()" class="btn-gold px-12 py-5 rounded-2xl font-bold uppercase text-[11px] shadow-xl w-full sm:w-auto">Escolher Horário</button>
+                <button onclick="window.showStep2()" class="btn-gold px-12 py-5 rounded-2xl font-bold uppercase text-[11px] w-full sm:w-auto shadow-xl">Próximo Passo</button>
             </div>
         </div>
 
-        <section id="step-2" class="hidden glass p-10 rounded-[3rem] mb-12 text-center">
-            <input type="date" id="c-date" class="w-full p-4 mb-10 text-center font-bold" onchange="window.loadHours()">
+        <section id="step-2" class="hidden glass p-10 rounded-[3rem] mb-12 text-center shadow-sm">
+            <h3 class="font-bold text-xs uppercase tracking-widest text-stone-500 mb-8 italic border-b pb-4">2. Agenda de Disponibilidade</h3>
+            <input type="date" id="c-date" onchange="window.loadHours()" class="mb-10">
             <div id="hours-grid" class="grid grid-cols-3 gap-4"></div>
         </section>
 
         <section id="step-3" class="hidden glass p-10 rounded-[3rem] mb-20 space-y-6 shadow-2xl">
             <input type="text" id="c-name" placeholder="Seu nome completo">
-            <input type="tel" id="c-phone" placeholder="Seu WhatsApp (com DDD)">
-            <button onclick="window.saveBooking()" class="w-full btn-gold py-6 rounded-2xl font-bold uppercase text-[11px]">Finalizar Agendamento</button>
+            <input type="tel" id="c-phone" placeholder="Seu WhatsApp">
+            <button onclick="window.saveBooking()" class="w-full btn-gold py-6 shadow-2xl uppercase text-[11px]">Finalizar Atendimento VIP</button>
         </section>
 
         <section class="mt-20 p-12 glass rounded-[3.5rem] text-center border-gold/10">
-            <h4 class="text-3xl font-bold italic mb-4">Localização</h4>
-            <p id="display-address" class="text-stone-500 text-lg mb-8 italic"></p>
+            <h4 class="text-3xl font-bold italic mb-4 text-stone-900">Nossa Localização</h4>
+            <p id="display-address" class="text-stone-500 text-lg mb-8 italic leading-relaxed"></p>
             <a id="btn-maps" href="#" target="_blank" class="inline-flex items-center gap-3 bg-stone-900 text-white font-bold text-[11px] uppercase tracking-[0.2em] px-12 py-5 rounded-2xl shadow-xl hover:scale-95 transition-all">
-                <i data-lucide="navigation-2" class="w-4 h-4"></i> Abrir GPS
+                <i data-lucide="navigation-2" class="w-4 h-4"></i> Abrir no GPS
             </a>
         </section>
     </main>
 
-    <!-- [VIEW: ADMIN DASHBOARD] -->
+    <!-- [ADMIN] -->
     <main id="view-admin" class="view-section max-w-6xl mx-auto p-6 pb-24">
         <div class="flex justify-between items-center mb-10">
             <h2 class="text-3xl font-bold italic">Dashboard Gestão</h2>
             <div class="flex gap-4">
                 <button onclick="window.setView('cliente')" class="text-[10px] font-bold text-stone-400 border px-4 py-2 rounded-xl">Ver Site</button>
-                <button onclick="window.logoutAdmin()" class="text-[10px] font-bold text-red-500 border border-red-100 px-4 py-2 rounded-xl bg-red-50">Sair</button>
+                <button onclick="window.logoutAdmin()" class="text-[10px] font-bold text-red-500 bg-red-50 border border-red-100 px-4 py-2 rounded-xl">Sair</button>
             </div>
         </div>
 
-        <div class="flex gap-8 mb-10 border-b overflow-x-auto">
-            <button onclick="window.showTab('agenda')" id="tab-agenda" class="tab-btn pb-4 text-xs font-bold uppercase active">Agenda</button>
-            <button onclick="window.showTab('grade')" id="tab-grade" class="tab-btn pb-4 text-xs font-bold uppercase">Bloquear Horários</button>
-            <button onclick="window.showTab('servicos')" id="tab-servicos" class="tab-btn pb-4 text-xs font-bold uppercase">Serviços</button>
-            <button onclick="window.showTab('studio')" id="tab-studio" class="tab-btn pb-4 text-xs font-bold uppercase">Configuração</button>
+        <div class="flex gap-8 mb-10 border-b border-stone-200 overflow-x-auto">
+            <button onclick="window.showTab('agenda')" id="tab-agenda" class="tab-btn py-4 text-xs font-bold uppercase active">Agenda</button>
+            <button onclick="window.showTab('grade')" id="tab-grade" class="tab-btn py-4 text-xs font-bold uppercase">Grade Horária</button>
+            <button onclick="window.showTab('servicos')" id="tab-servicos" class="tab-btn py-4 text-xs font-bold uppercase">Serviços</button>
+            <button onclick="window.showTab('studio')" id="tab-studio" class="tab-btn py-4 text-xs font-bold uppercase">Configuração</button>
         </div>
 
-        <!-- TAB: AGENDA -->
+        <!-- TAB AGENDA -->
         <section id="content-agenda" class="tab-content">
             <div class="glass p-8 rounded-[2rem] mb-10 text-center border-emerald-100 shadow-sm">
                 <p class="text-stone-400 text-[10px] uppercase font-bold mb-1">Lucro Estimado</p>
-                <h3 id="stat-profit" class="text-5xl font-bold text-stone-900 tracking-tighter">R$ 0,00</h3>
+                <h3 id="stat-profit" class="text-5xl font-bold text-stone-900 tracking-tighter italic">R$ 0,00</h3>
             </div>
             <div id="admin-list" class="space-y-6"></div>
         </section>
 
-        <!-- TAB: GRADE -->
+        <!-- TAB GRADE -->
         <section id="content-grade" class="tab-content hidden">
-            <div class="glass p-10 rounded-[3rem] text-center">
-                <input type="date" id="adm-grade-date" class="w-full mb-8" onchange="window.loadAdminGrade()">
+            <div class="glass p-10 rounded-[3rem] text-center shadow-sm">
+                <h4 class="font-bold mb-6 text-stone-400 uppercase text-[10px]">Bloqueio Manual de Horário</h4>
+                <input type="date" id="adm-grade-date" class="w-full mb-10" onchange="window.loadAdminGrade()">
                 <div id="admin-hours-grid" class="grid grid-cols-4 gap-3"></div>
             </div>
         </section>
 
-        <!-- TAB: SERVIÇOS -->
+        <!-- TAB SERVICOS -->
         <section id="content-servicos" class="tab-content hidden">
             <div class="glass p-10 rounded-[3rem] mb-10">
                 <div class="flex gap-4">
@@ -122,17 +128,24 @@
             <div id="admin-services-list" class="grid md:grid-cols-2 gap-4"></div>
         </section>
 
-        <!-- TAB: CONFIGURAÇÃO -->
+        <!-- TAB STUDIO -->
         <section id="content-studio" class="tab-content hidden">
             <div class="glass p-10 rounded-[3rem] space-y-6">
-                <input type="text" id="adm-address" placeholder="Endereço">
-                <input type="text" id="adm-maps-link" placeholder="Link Google Maps">
-                <button onclick="window.updateStudioConfig()" class="w-full btn-gold py-5 rounded-2xl uppercase text-[10px]">Salvar Studio</button>
+                <div>
+                    <label class="text-[10px] font-bold text-stone-400 uppercase mb-2 block tracking-widest">Endereço do Studio</label>
+                    <input type="text" id="adm-address" class="w-full text-left">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-stone-400 uppercase mb-2 block tracking-widest">Link Google Maps</label>
+                    <input type="text" id="adm-maps-link" class="w-full text-left">
+                </div>
+                <button onclick="window.updateStudioConfig()" class="w-full btn-gold py-5 rounded-2xl font-bold uppercase text-[10px]">Atualizar Studio</button>
             </div>
         </section>
     </main>
 
     <script type="module">
+        // --- INICIALIZAÇÃO BLINDADA ---
         const _URL = "https://rbhgxrcqqtxnzzyllqms.supabase.co";
         const _KEY = "sb_publishable_OH1hqvBo8vmj_qsvtjKZhQ_QKTg4mLg";
         const supabase = window.supabase.createClient(_URL, _KEY);
@@ -141,23 +154,7 @@
         let selectedHour = null;
         let studioCfg = {};
 
-        // INICIALIZAÇÃO
-        async function start() {
-            lucide.createIcons();
-            const { data } = await supabase.from('configs').select('*').single();
-            studioCfg = data;
-            
-            document.getElementById('display-address').innerText = studioCfg.endereco;
-            document.getElementById('btn-maps').href = studioCfg.link_maps;
-            
-            if (localStorage.getItem('studio_logged') === 'true') { toggleView('admin'); }
-            else { toggleView('cliente'); }
-
-            loadServices();
-            document.getElementById('c-date').min = new Date().toISOString().split('T')[0];
-        }
-
-        // VIEW LOGIC
+        // --- FUNÇÕES GLOBAIS ---
         window.setView = (view) => {
             document.querySelectorAll('.view-section').forEach(s => s.style.display = 'none');
             document.getElementById(`view-${view}`).style.display = 'block';
@@ -175,15 +172,16 @@
             }
         };
 
-        // CLIENT ACTIONS
         window.loadServices = async () => {
-            const { data: servs } = await supabase.from('servicos').select('*').order('nome');
+            const { data: servs, error } = await supabase.from('servicos').select('*').order('nome');
+            if(error) return;
             const grid = document.getElementById('services-grid');
             const adminList = document.getElementById('admin-services-list');
             grid.innerHTML = ''; adminList.innerHTML = '';
-            servs?.forEach(s => {
-                grid.innerHTML += `<div onclick="window.toggleS('${s.id}', '${s.nome}', ${s.preco}, this)" class="card-service shadow-sm flex justify-between items-center"><span class="font-bold text-stone-800 text-lg leading-none">${s.nome}</span><span class="font-bold text-stone-400 italic">R$ ${s.preco}</span></div>`;
-                adminList.innerHTML += `<div class="flex justify-between items-center glass p-6 rounded-2xl font-bold"><span>${s.nome}</span><span>R$ ${s.preco} <button onclick="window.delS('${s.id}')" class="ml-4 text-red-300"><i data-lucide="trash-2" class="w-4"></i></button></span></div>`;
+
+            servs.forEach(s => {
+                grid.innerHTML += `<div onclick="window.toggleS('${s.id}', '${s.nome}', ${s.preco}, this)" class="card-service shadow-sm"><span class="font-bold text-stone-800 text-lg">${s.nome}</span><span class="font-bold text-stone-400 italic">R$ ${s.preco}</span></div>`;
+                adminList.innerHTML += `<div class="flex justify-between items-center glass p-6 rounded-2xl font-bold"><span>${s.nome}</span><span>R$ ${s.preco} <button onclick="window.delS('${s.id}')" class="ml-4 text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4"></i></button></span></div>`;
             });
             lucide.createIcons();
         };
@@ -202,7 +200,8 @@
         window.loadHours = async () => {
             const date = document.getElementById('c-date').value;
             const grid = document.getElementById('hours-grid');
-            const { data: booked } = await supabase.from('agendamentos').select('horario').eq('data', date).neq('status', 'Desmarcado');
+            grid.innerHTML = '<p class="col-span-3 text-center py-4 animate-pulse text-xs">Consultando...</p>';
+            const { data: booked } = await supabase.from('agendamentos').select('horario, status').eq('data', date).neq('status', 'Desmarcado');
             const taken = booked.map(b => b.horario);
             grid.innerHTML = '';
             for(let h = 8; h < 19; h++) {
@@ -217,6 +216,7 @@
                         document.querySelectorAll('.hour-pill').forEach(p => p.classList.remove('selected'));
                         btn.classList.add('selected');
                         document.getElementById('step-3').classList.remove('hidden');
+                        document.getElementById('step-3').scrollIntoView({behavior:'smooth'});
                     };
                     grid.appendChild(btn);
                 });
@@ -224,57 +224,60 @@
         };
 
         window.saveBooking = async () => {
-            const n = document.getElementById('c-name').value;
-            const p = document.getElementById('c-phone').value;
-            const d = document.getElementById('c-date').value;
-            if(!n || !p || !selectedHour) return alert("Preencha tudo!");
-            const total = selectedServices.reduce((a, b) => a + b.preco, 0);
+            const name = document.getElementById('c-name').value;
+            const phone = document.getElementById('c-phone').value;
+            const date = document.getElementById('c-date').value;
+            if(!name || !phone || !selectedHour) return alert("Preencha tudo!");
+            const total = selectedServices.reduce((acc, curr) => acc + curr.preco, 0);
             const servs = selectedServices.map(s => s.nome).join(', ');
-            
             const { error } = await supabase.from('agendamentos').insert([{
-                cliente_nome: n, cliente_whatsapp: p, servicos_escolhidos: servs,
-                data: d, horario: selectedHour, valor_total: total
+                cliente_nome: name, cliente_whatsapp: phone, servicos_escolhidos: servs,
+                data: date, horario: selectedHour, valor_total: total
             }]);
-            
             if(!error) {
-                const msg = `💎 *RESERVA VIP - KAYRILEYDE SANTOS* 💎\n\nOlá Kayrileyde! Sou *${n}* e reservei um momento especial pelo seu site.\n\n🛠 *Serviços:* ${servs}\n📅 *Data:* ${d.split('-').reverse().join('/')}\n⏰ *Horário:* ${selectedHour}\n💰 *Valor Total:* R$ ${total.toFixed(2)}\n\n_Pode confirmar minha vinda?_ ✨`;
+                const msg = `💎 *AGENDAMENTO VIP - KAYRILEYDE SANTOS* 💎\n\nOlá Kayrileyde! Sou *${name}* e agendei pelo seu site:\n\n🛠 *Serviços:* ${servs}\n📅 *Data:* ${date.split('-').reverse().join('/')}\n⏰ *Horário:* ${selectedHour}\n💰 *Valor Total:* R$ ${total.toFixed(2)}\n\n_Pode validar meu atendimento?_ ✨`;
                 window.open(`https://wa.me/${studioCfg.whatsapp}?text=${encodeURIComponent(msg)}`);
                 location.reload();
             }
         };
 
-        // ADMIN ACTIONS
+        window.requestAdmin = () => {
+            if (localStorage.getItem('studio_logged') === 'true') { window.setView('admin'); }
+            else { if(prompt("Senha Administrativa:") === studioCfg.senha_adm) { localStorage.setItem('studio_logged', 'true'); window.setView('admin'); } }
+        };
+
+        window.logoutAdmin = () => { localStorage.removeItem('studio_logged'); location.reload(); };
+
         window.loadDash = async () => {
             const { data: agends } = await supabase.from('agendamentos').select('*').order('data', {ascending: false});
             const list = document.getElementById('admin-list');
             list.innerHTML = ''; let profit = 0;
-            
             agends.forEach(a => {
                 if(a.status === 'Atendido') profit += parseFloat(a.valor_total);
                 if(a.status === 'Bloqueado') return;
-
                 list.innerHTML += `
-                    <div class="glass p-8 rounded-[2.5rem] flex flex-col md:flex-row justify-between items-center gap-6 shadow-sm">
-                        <div>
+                    <div class="glass p-6 rounded-[2rem] flex flex-col md:flex-row justify-between items-center gap-6 shadow-sm">
+                        <div class="text-center md:text-left">
                             <span class="status-badge ${a.status==='Atendido'?'bg-green-100 text-green-700':'bg-blue-100 text-blue-700'}">${a.status}</span>
-                            <h4 class="font-bold text-2xl mt-2">${a.cliente_nome}</h4>
+                            <h4 class="font-bold text-2xl mt-2 text-stone-900">${a.cliente_nome}</h4>
                             <p class="text-xs text-stone-400 italic">${a.servicos_escolhidos} • ${a.data} às ${a.horario}</p>
                         </div>
                         <div class="flex items-center gap-4">
-                            <span class="font-bold text-xl italic">R$ ${a.valor_total}</span>
+                            <span class="font-bold text-xl italic tracking-tighter leading-none">R$ ${a.valor_total}</span>
                             <div class="flex flex-col gap-1">
-                                <button onclick="window.upStat('${a.id}','Atendido')" class="text-[9px] bg-green-600 text-white px-5 py-2 rounded-lg font-bold uppercase">Concluído</button>
-                                <button onclick="window.upStat('${a.id}','Desmarcado')" class="text-[9px] bg-red-100 text-red-600 px-5 py-2 rounded-lg font-bold uppercase">Excluir</button>
-                                <button onclick="window.sendVIPRemind('${a.cliente_whatsapp}', '${a.cliente_nome}', '${a.horario}', '${a.servicos_escolhidos}')" class="text-[9px] bg-stone-900 text-white px-5 py-2 rounded-lg font-bold uppercase shadow-xl">Enviar Lembrete</button>
+                                <button onclick="window.upStat('${a.id}','Atendido')" class="text-[9px] bg-stone-900 text-white px-4 py-2 rounded-lg font-bold uppercase shadow-lg">Finalizar</button>
+                                <button onclick="window.upStat('${a.id}','Desmarcado')" class="text-[9px] border px-4 py-2 rounded-lg font-bold uppercase">Excluir</button>
+                                <button onclick="window.sendVIPRemind('${a.cliente_whatsapp}','${a.cliente_nome}','${a.horario}','${a.servicos_escolhidos}')" class="text-[9px] bg-emerald-50 text-emerald-700 border border-emerald-100 px-4 py-2 rounded-lg font-bold uppercase mt-2">Lembrar Cliente</button>
                             </div>
                         </div>
                     </div>`;
             });
             document.getElementById('stat-profit').innerText = `R$ ${profit.toFixed(2)}`;
+            lucide.createIcons();
         };
 
         window.sendVIPRemind = (phone, name, hour, services) => {
-            const msg = `💎 *CONFIRMAÇÃO VIP - STUDIO KAYRILEYDE SANTOS* 💎\n\nOlá *${name}*! Tudo bem? ✨\nPassando para confirmar que seu momento de beleza está chegando!\n\n⏰ *Horário:* ${hour}\n🛠 *Procedimentos:* ${services}\n📍 *Local:* ${studioCfg.endereco}\n\nPodemos confirmar sua vinda para prepararmos tudo com excelência? ✨🥂`;
+            const msg = `💎 *CONFIRMAÇÃO VIP - STUDIO KAYRILEYDE SANTOS* 💎\n\nOlá *${name}*! ✨\nPassando para confirmar que seu momento de beleza está chegando!\n\n⏰ *Horário:* ${hour}\n🛠 *Procedimentos:* ${services}\n📍 *Local:* ${studioCfg.endereco}\n\nPodemos confirmar sua presença para prepararmos tudo com excelência? ✨🥂`;
             window.open(`https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`);
         };
 
@@ -302,17 +305,23 @@
             }
         };
 
-        window.requestAdminAccess = () => {
-            if (localStorage.getItem('studio_logged') === 'true') { window.setView('admin'); }
-            else { if(prompt("Senha Administrativa:") === studioCfg.senha_adm) { localStorage.setItem('studio_logged', 'true'); window.setView('admin'); } }
-        };
-
-        window.logoutAdmin = () => { localStorage.removeItem('studio_logged'); location.reload(); };
         window.upStat = async (id, status) => { await supabase.from('agendamentos').update({ status }).eq('id', id); window.loadDash(); };
         window.addService = async () => { const n = document.getElementById('add-s-name').value; const p = document.getElementById('add-s-price').value; await supabase.from('servicos').insert([{ nome: n, preco: parseFloat(p) }]); location.reload(); };
         window.delS = async (id) => { if(confirm("Excluir?")) { await supabase.from('servicos').delete().eq('id', id); location.reload(); }};
         window.updateStudioConfig = async () => { await supabase.from('configs').update({ endereco: document.getElementById('adm-address').value, link_maps: document.getElementById('adm-maps-link').value }).eq('id', 1); alert("Salvo!"); location.reload(); };
 
+        // --- START ---
+        async function start() {
+            const { data, error } = await supabase.from('configs').select('*').single();
+            if(data) {
+                studioCfg = data;
+                document.getElementById('display-address').innerText = data.endereco;
+                document.getElementById('btn-maps').href = data.link_maps;
+                if (localStorage.getItem('studio_logged') === 'true') { window.setView('admin'); }
+                else { window.setView('cliente'); }
+                window.loadServices();
+            }
+        }
         start();
     </script>
 </body>
