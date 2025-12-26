@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kayrileyde Santos | Studio de Luxo</title>
+    <title>Kayrileyde Santos | Gestão de Luxo</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -18,142 +18,128 @@
         .glass { background: white; border: 1px solid rgba(197, 160, 89, 0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.02); }
         .card-service { border: 1px solid #f2f2f2; transition: 0.3s; cursor: pointer; border-radius: 1.2rem; background: white; }
         .card-service.active { border-color: var(--gold); background: #fdfaf5; transform: scale(1.02); }
-        .view-section { display: none; animation: fadeInUp 0.8s ease; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .view-section { display: none; }
         .hour-pill { border: 1px solid #e5e7eb; padding: 12px; border-radius: 12px; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .hour-pill:hover:not(.disabled) { border-color: var(--gold); color: var(--gold); background: white; }
         .hour-pill.selected { background: var(--gold); color: white; border-color: var(--gold); }
         .hour-pill.disabled { background: #f9fafb; color: #d1d5db; cursor: not-allowed; text-decoration: line-through; border-style: dashed; }
-        .status-badge { font-size: 8px; padding: 2px 10px; border-radius: 30px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        input { border: 1px solid #e2e8f0 !important; border-radius: 1rem !important; padding: 1rem !important; outline: none; background: white !important; transition: 0.3s; }
-        input:focus { border-color: var(--gold) !important; box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.1); }
-        .luxury-line { height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); width: 60%; margin: 2rem auto; opacity: 0.3; }
+        input { border: 1px solid #e2e8f0 !important; border-radius: 1rem !important; padding: 1rem !important; outline: none; background: white !important; }
+        .tab-btn.active { border-bottom: 3px solid var(--gold); color: var(--gold); font-weight: 800; }
     </style>
 </head>
 <body class="antialiased">
 
     <!-- NAVIGATION -->
-    <nav class="p-8 flex justify-between items-center max-w-6xl mx-auto sticky top-0 z-50 backdrop-blur-xl">
+    <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto sticky top-0 z-50 backdrop-blur-xl">
         <div class="flex flex-col">
-            <span class="text-[9px] tracking-[0.5em] text-stone-400 uppercase font-black">Luxury Studio</span>
+            <span class="text-[9px] tracking-[0.5em] text-stone-400 uppercase font-black">Studio Luxo</span>
             <h1 class="italic text-2xl text-stone-900 font-medium">Kayrileyde Santos</h1>
         </div>
-        <button onclick="toggleAdmin()" class="w-12 h-12 rounded-2xl flex items-center justify-center border border-stone-100 hover:border-gold/50 transition-all bg-white/50 shadow-sm">
+        <button onclick="requestAdminAccess()" class="w-12 h-12 rounded-2xl flex items-center justify-center border border-stone-100 hover:border-gold/50 transition-all bg-white/50 shadow-sm">
             <i data-lucide="layout-grid" class="text-stone-400 w-5 h-5"></i>
         </button>
     </nav>
 
-    <!-- [CLIENT VIEW] -->
-    <main id="view-cliente" class="view-section max-w-2xl mx-auto p-6 pb-24" style="display: block;">
+    <!-- [VIEW: CLIENTE] -->
+    <main id="view-cliente" class="view-section max-w-2xl mx-auto p-6 pb-24">
         <header class="text-center py-20">
-            <h2 class="text-5xl lg:text-6xl font-light mb-6 italic leading-tight text-stone-900">Beleza esculpida com alma.</h2>
-            <div class="luxury-line"></div>
-            <p class="text-stone-400 text-[11px] uppercase tracking-[0.6em] font-bold">Menu de Experiências</p>
+            <h2 class="text-5xl lg:text-6xl font-light mb-6 italic leading-tight text-stone-900">Sua melhor versão.</h2>
+            <p class="text-stone-400 text-[11px] uppercase tracking-[0.6em] font-bold">Reserva Online VIP</p>
         </header>
 
         <!-- Pass 1: Services -->
         <div class="glass p-10 rounded-[3rem] mb-12">
             <div id="services-grid" class="space-y-4">
-                <p class="text-center py-20 animate-pulse text-stone-300 italic uppercase tracking-widest text-[10px]">Acessando Studio...</p>
+                <p class="text-center py-20 animate-pulse text-stone-300">Conectando...</p>
             </div>
-            
-            <div id="total-bar" class="hidden mt-12 pt-10 border-t border-stone-100 flex flex-col sm:flex-row justify-between items-center gap-6">
-                <div class="text-center sm:text-left">
-                    <span class="text-[10px] font-bold uppercase text-stone-400 block mb-1 tracking-widest">Total dos Procedimentos</span>
+            <div id="total-bar" class="hidden mt-12 pt-10 border-t flex flex-col sm:flex-row justify-between items-center gap-6">
+                <div>
                     <span id="display-total" class="text-4xl font-bold text-stone-900 italic tracking-tighter">R$ 0,00</span>
                 </div>
-                <button onclick="showStep2()" class="btn-gold px-12 py-5 rounded-2xl font-bold uppercase text-[11px] shadow-2xl w-full sm:w-auto">Escolher Horário</button>
+                <button onclick="showStep2()" class="btn-gold px-12 py-5 rounded-2xl font-bold uppercase text-[11px] w-full sm:w-auto">Escolher Dia</button>
             </div>
         </div>
 
-        <!-- Pass 2: Date & Time -->
+        <!-- Pass 2: Time -->
         <section id="step-2" class="hidden glass p-10 rounded-[3rem] mb-12">
-            <h3 class="font-bold text-xs uppercase tracking-widest text-stone-500 mb-8 italic border-b pb-4">Agenda de Disponibilidade</h3>
-            <input type="date" id="c-date" class="w-full p-4 border rounded-2xl mb-10 text-center font-bold" onchange="loadAvailableHours()">
+            <input type="date" id="c-date" class="w-full p-4 mb-10 text-center font-bold" onchange="loadAvailableHours()">
             <div id="hours-grid" class="grid grid-cols-3 gap-4"></div>
         </section>
 
         <!-- Pass 3: Finalize -->
-        <section id="step-3" class="hidden glass p-10 rounded-[3rem] mb-20">
-            <div class="space-y-6">
-                <input type="text" id="c-name" placeholder="Seu nome completo" class="w-full text-center">
-                <input type="tel" id="c-phone" placeholder="Seu WhatsApp" class="w-full text-center">
-                <button onclick="saveBooking()" class="w-full btn-gold py-6 rounded-2xl font-bold uppercase text-[11px] shadow-2xl">Finalizar Atendimento VIP</button>
-            </div>
+        <section id="step-3" class="hidden glass p-10 rounded-[3rem] mb-20 space-y-6">
+            <input type="text" id="c-name" placeholder="Seu nome" class="w-full text-center">
+            <input type="tel" id="c-phone" placeholder="Seu WhatsApp" class="w-full text-center">
+            <button onclick="saveBooking()" class="w-full btn-gold py-6 rounded-2xl font-bold uppercase text-[11px]">Agendar Agora</button>
         </section>
 
-        <!-- LUXURY LOCATION SECTION -->
-        <section class="mt-32 p-12 glass rounded-[3.5rem] text-center border-gold/10 relative overflow-hidden">
-            <div class="absolute top-0 right-0 p-8 opacity-5">
-                <i data-lucide="map" class="w-32 h-32"></i>
-            </div>
-            <div class="relative z-10">
-                <span class="text-[10px] font-bold text-gold uppercase tracking-[0.5em] mb-4 block">Visite nosso espaço</span>
-                <h4 class="text-3xl font-bold italic mb-6">Onde a magia acontece</h4>
-                <p id="display-address" class="text-stone-500 text-lg mb-10 italic max-w-sm mx-auto leading-relaxed">Carregando endereço exclusivo...</p>
-                
-                <a id="btn-maps" href="#" target="_blank" class="inline-flex items-center justify-center gap-3 bg-stone-900 text-white font-bold text-[11px] uppercase tracking-[0.2em] px-12 py-5 rounded-2xl hover:bg-stone-800 transition-all shadow-xl active:scale-95">
-                    <i data-lucide="navigation-2" class="w-4 h-4"></i>
-                    Como Chegar no Studio
-                </a>
-            </div>
+        <!-- CLIENT LOCATION -->
+        <section class="mt-20 p-12 glass rounded-[3.5rem] text-center border-gold/10">
+            <h4 class="text-3xl font-bold italic mb-4">Onde Estamos</h4>
+            <p id="display-address" class="text-stone-500 text-lg mb-8 italic leading-relaxed"></p>
+            <a id="btn-maps" href="#" target="_blank" class="inline-flex items-center gap-3 bg-stone-900 text-white font-bold text-[11px] uppercase tracking-[0.2em] px-12 py-5 rounded-2xl shadow-xl">
+                <i data-lucide="map-pin" class="w-4 h-4"></i> Abrir GPS
+            </a>
         </section>
     </main>
 
-    <!-- [ADMIN DASHBOARD] -->
-    <main id="view-admin" class="view-section max-w-6xl mx-auto p-6 pb-24 text-stone-800">
-        <div class="flex justify-between items-center mb-16">
-            <h2 class="text-3xl font-bold italic">Dashboard Financeiro</h2>
-            <button onclick="toggleAdmin()" class="text-[10px] font-bold text-stone-400 uppercase border px-6 py-3 rounded-xl hover:bg-white transition-all shadow-sm">Voltar ao Site</button>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-16">
-            <!-- FINANCEIRO -->
-            <div class="glass p-10 rounded-[2.5rem] lg:col-span-1 text-center border-green-500/10">
-                <p class="text-stone-400 text-[10px] font-bold uppercase tracking-widest mb-2 italic">Faturamento Total</p>
-                <h3 id="stat-profit" class="text-5xl font-bold text-stone-900 tracking-tighter italic">R$ 0,00</h3>
-            </div>
-
-            <!-- GESTÃO DE SERVIÇOS -->
-            <div class="glass p-10 rounded-[2.5rem] lg:col-span-3">
-                <p class="text-stone-400 text-[10px] font-bold uppercase mb-6 italic border-b pb-2">Gestão do Menu de Serviços</p>
-                <div id="admin-services-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6 max-h-48 overflow-y-auto pr-2"></div>
-                <div class="flex flex-wrap gap-3 pt-4 border-t border-stone-50">
-                    <input type="text" id="add-s-name" placeholder="Novo Serviço" class="text-xs !p-3 flex-1">
-                    <input type="text" id="add-s-price" placeholder="R$ 0,00" class="text-xs !p-3 w-28">
-                    <button onclick="addService()" class="btn-gold px-8 rounded-xl text-[10px] font-bold uppercase">Adicionar</button>
-                </div>
+    <!-- [VIEW: ADMIN DASHBOARD] -->
+    <main id="view-admin" class="view-section max-w-6xl mx-auto p-6 pb-24">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="text-3xl font-bold italic">Painel de Gestão</h2>
+            <div class="flex gap-4">
+                <button onclick="toggleView('cliente')" class="text-[10px] font-bold text-stone-400 border px-4 py-2 rounded-xl">Ver Site</button>
+                <button onclick="logoutAdmin()" class="text-[10px] font-bold text-red-500 border border-red-100 px-4 py-2 rounded-xl bg-red-50">Sair</button>
             </div>
         </div>
 
-        <!-- AGENDA -->
-        <div class="glass p-12 rounded-[3rem] mb-16">
-            <h3 class="font-bold text-2xl mb-12 italic underline decoration-gold/30">Agenda & Fluxo de Clientes</h3>
-            <div id="admin-list" class="space-y-8"></div>
+        <!-- TABS ADM -->
+        <div class="flex gap-8 mb-10 border-b border-stone-200">
+            <button onclick="showTab('agenda')" id="tab-agenda" class="tab-btn py-4 text-xs font-bold uppercase tracking-widest active">Agenda & Lucros</button>
+            <button onclick="showTab('servicos')" id="tab-servicos" class="tab-btn py-4 text-xs font-bold uppercase tracking-widest">Serviços & Preços</button>
+            <button onclick="showTab('studio')" id="tab-studio" class="tab-btn py-4 text-xs font-bold uppercase tracking-widest">Configuração Studio</button>
         </div>
 
-        <!-- DISCREET SETTINGS SECTION (CONFIGURAÇÕES DO STUDIO) -->
-        <section class="mt-20 border-t border-stone-100 pt-10">
-            <button onclick="document.getElementById('studio-settings').classList.toggle('hidden')" class="text-[10px] font-bold text-stone-300 uppercase tracking-widest hover:text-stone-900 transition-colors flex items-center gap-2 mx-auto italic">
-                <i data-lucide="settings" class="w-3 h-3"></i> Configurações do Studio (Endereço e Links)
-            </button>
-            <div id="studio-settings" class="hidden mt-10 glass p-10 rounded-[2.5rem] max-w-2xl mx-auto space-y-6">
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-stone-400 block mb-2">Endereço Visível para o Cliente</label>
-                    <input type="text" id="adm-address" class="w-full text-sm">
+        <!-- TAB: AGENDA -->
+        <section id="content-agenda" class="tab-content">
+            <div class="glass p-8 rounded-[2rem] mb-10 text-center">
+                <p class="text-stone-400 text-[10px] uppercase font-bold mb-1">Faturamento Bruto</p>
+                <h3 id="stat-profit" class="text-5xl font-bold text-stone-900 tracking-tighter">R$ 0,00</h3>
+            </div>
+            <div id="admin-list" class="space-y-6"></div>
+        </section>
+
+        <!-- TAB: SERVIÇOS -->
+        <section id="content-servicos" class="tab-content hidden">
+            <div class="glass p-10 rounded-[3rem] mb-10">
+                <h4 class="font-bold mb-6 text-stone-400 uppercase text-[10px]">Cadastrar Novo Procedimento</h4>
+                <div class="flex gap-4">
+                    <input type="text" id="add-s-name" placeholder="Nome do Serviço" class="flex-1">
+                    <input type="text" id="add-s-price" placeholder="Preço (R$)" class="w-32">
+                    <button onclick="addService()" class="btn-gold px-8 rounded-2xl font-bold text-xs uppercase">Adicionar</button>
                 </div>
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-stone-400 block mb-2">Link do Google Maps (Botão)</label>
-                    <input type="text" id="adm-maps-link" class="w-full text-sm">
+            </div>
+            <div id="admin-services-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </section>
+
+        <!-- TAB: CONFIGURAÇÃO STUDIO (LOCALIZAÇÃO) -->
+        <section id="content-studio" class="tab-content hidden">
+            <div class="glass p-10 rounded-[3rem]">
+                <h4 class="font-bold mb-8 italic text-2xl">Editar Informações do Studio</h4>
+                <div class="space-y-6">
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-stone-400 block mb-2">Endereço Completo</label>
+                        <input type="text" id="adm-address" placeholder="Rua, Número, Bairro, Cidade..." class="w-full text-sm">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-stone-400 block mb-2">Link do Google Maps</label>
+                        <input type="text" id="adm-maps-link" placeholder="Cole o link compartilhado do Maps aqui" class="w-full text-sm">
+                    </div>
+                    <button onclick="updateStudioConfig()" class="btn-gold w-full py-5 rounded-2xl font-bold uppercase text-[10px]">Salvar Alterações do Studio</button>
                 </div>
-                <button onclick="updateLocation()" class="w-full btn-gold py-4 rounded-xl text-[10px] font-bold uppercase">Salvar Configurações</button>
             </div>
         </section>
     </main>
-
-    <footer class="py-20 text-center opacity-30 text-[10px] font-bold tracking-[0.5em] uppercase">
-        © Studio Kayrileyde Santos
-    </footer>
 
     <script type="module">
         const _URL = "https://rbhgxrcqqtxnzzyllqms.supabase.co";
@@ -169,9 +155,17 @@
             const { data } = await supabase.from('configs').select('*').single();
             studioCfg = data;
             
+            // UI Update
             document.getElementById('display-address').innerText = studioCfg.endereco;
             document.getElementById('btn-maps').href = studioCfg.link_maps;
             
+            // Persistence Check
+            if (localStorage.getItem('studio_logged') === 'true') {
+                toggleView('admin');
+            } else {
+                toggleView('cliente');
+            }
+
             loadServices();
             document.getElementById('c-date').min = new Date().toISOString().split('T')[0];
         }
@@ -183,19 +177,11 @@
             grid.innerHTML = ''; adminList.innerHTML = '';
 
             servs.forEach(s => {
-                grid.innerHTML += `
-                    <div onclick="toggleService('${s.id}', '${s.nome}', ${s.preco}, this)" class="card-service p-8 flex justify-between items-center transition-all group">
-                        <span class="font-bold text-stone-800 text-xl group-hover:text-gold transition-colors">${s.nome}</span>
-                        <span class="font-bold text-stone-400 italic text-lg">R$ ${s.preco}</span>
-                    </div>`;
-                adminList.innerHTML += `
-                    <div class="flex justify-between items-center bg-stone-50 p-4 rounded-2xl text-xs border border-stone-100">
-                        <span class="font-bold">${s.nome}</span>
-                        <div class="flex gap-4 items-center">
-                            <input type="text" value="${s.preco}" onchange="updatePrice('${s.id}', this.value)" class="w-16 !p-2 text-center font-bold !bg-white border">
-                            <button onclick="deleteService('${s.id}')" class="text-red-300 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                        </div>
-                    </div>`;
+                // Client Card
+                grid.innerHTML += `<div onclick="toggleService('${s.id}', '${s.nome}', ${s.preco}, this)" class="card-service p-8 flex justify-between items-center"><span class="font-bold text-stone-800 text-xl">${s.nome}</span><span class="font-bold text-stone-400 italic">R$ ${s.preco}</span></div>`;
+                
+                // Admin Edit Card
+                adminList.innerHTML += `<div class="flex justify-between items-center glass p-6 rounded-2xl"><span>${s.nome}</span><div class="flex gap-4 items-center font-bold text-stone-900">R$ ${s.preco}<button onclick="deleteService('${s.id}')" class="text-red-400"><i data-lucide="trash-2" class="w-4"></i></button></div></div>`;
             });
             lucide.createIcons();
         }
@@ -209,19 +195,14 @@
             document.getElementById('total-bar').classList.toggle('hidden', selectedServices.length === 0);
         }
 
-        window.showStep2 = () => {
-            document.getElementById('step-2').classList.remove('hidden');
-            document.getElementById('step-2').scrollIntoView({behavior:'smooth'});
-        };
+        window.showStep2 = () => document.getElementById('step-2').classList.remove('hidden');
 
         async function loadAvailableHours() {
             const date = document.getElementById('c-date').value;
             const grid = document.getElementById('hours-grid');
-            grid.innerHTML = '<p class="col-span-3 text-center py-10 animate-pulse text-stone-400 text-[10px] uppercase tracking-widest font-bold italic">Consultando Horários...</p>';
-            
+            grid.innerHTML = '<p class="col-span-3 text-center py-10 animate-pulse text-stone-400 italic">Consultando...</p>';
             const { data: booked } = await supabase.from('agendamentos').select('horario').eq('data', date).neq('status', 'Desmarcado');
             const taken = booked.map(b => b.horario);
-            
             grid.innerHTML = '';
             for(let h = 8; h < 19; h++) {
                 ['00', '30'].forEach(m => {
@@ -235,7 +216,6 @@
                         document.querySelectorAll('.hour-pill').forEach(p => p.classList.remove('selected'));
                         btn.classList.add('selected');
                         document.getElementById('step-3').classList.remove('hidden');
-                        document.getElementById('step-3').scrollIntoView({behavior:'smooth'});
                     };
                     grid.appendChild(btn);
                 });
@@ -246,32 +226,50 @@
             const name = document.getElementById('c-name').value;
             const phone = document.getElementById('c-phone').value;
             const date = document.getElementById('c-date').value;
-            if(!name || !phone || !selectedHour) return alert("Por favor, preencha todos os dados.");
+            if(!name || !phone || !selectedHour) return alert("Preencha tudo!");
             const total = selectedServices.reduce((acc, curr) => acc + curr.preco, 0);
             const servs = selectedServices.map(s => s.nome).join(', ');
-            
             const { error } = await supabase.from('agendamentos').insert([{
                 cliente_nome: name, cliente_whatsapp: phone, servicos_escolhidos: servs,
                 data: date, horario: selectedHour, valor_total: total
             }]);
-            
             if(!error) {
-                const msg = `💎 *AGENDAMENTO CONFIRMADO - KAYRILEYDE SANTOS*\n\nOlá Kayrileyde! Sou *${name}* e agendei uma experiência VIP pelo site.\n\n🛠 *Serviços:* ${servs}\n📅 *Data:* ${date.split('-').reverse().join('/')}\n⏰ *Horário:* ${selectedHour}\n📍 *Local:* ${studioCfg.endereco}\n\n_Pode validar minha reserva?_ ✨`;
+                const msg = `💎 *AGENDAMENTO VIP - KAYRILEYDE SANTOS*\n\nOlá Kayrileyde! Sou *${name}* e agendei pelo site.\n\n🛠 *Serviços:* ${servs}\n📅 *Data:* ${date.split('-').reverse().join('/')}\n⏰ *Horário:* ${selectedHour}\n\n_Pode validar minha reserva?_ ✨`;
                 window.open(`https://wa.me/${studioCfg.whatsapp}?text=${encodeURIComponent(msg)}`);
                 location.reload();
             }
         };
 
-        window.toggleAdmin = async () => {
-            const adm = document.getElementById('view-admin');
-            const cli = document.getElementById('view-cliente');
-            if(adm.style.display === 'block') { adm.style.display = 'none'; cli.style.display = 'block'; }
-            else { 
-                if(prompt("Acesso Administrativo - Senha:") === studioCfg.senha_adm) {
-                    cli.style.display = 'none'; adm.style.display = 'block'; loadDash();
-                    document.getElementById('adm-address').value = studioCfg.endereco;
-                    document.getElementById('adm-maps-link').value = studioCfg.link_maps;
+        window.requestAdminAccess = () => {
+            if (localStorage.getItem('studio_logged') === 'true') {
+                toggleView('admin');
+            } else {
+                if(prompt("Senha:") === studioCfg.senha_adm) {
+                    localStorage.setItem('studio_logged', 'true');
+                    toggleView('admin');
                 }
+            }
+        };
+
+        window.logoutAdmin = () => {
+            localStorage.removeItem('studio_logged');
+            location.reload();
+        };
+
+        window.toggleView = (view) => {
+            document.getElementById('view-cliente').style.display = view === 'cliente' ? 'block' : 'none';
+            document.getElementById('view-admin').style.display = view === 'admin' ? 'block' : 'none';
+            if(view === 'admin') loadDash();
+        };
+
+        window.showTab = (tab) => {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`content-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            if(tab === 'studio') {
+                document.getElementById('adm-address').value = studioCfg.endereco;
+                document.getElementById('adm-maps-link').value = studioCfg.link_maps;
             }
         };
 
@@ -279,27 +277,21 @@
             const { data: agends } = await supabase.from('agendamentos').select('*').order('data', {ascending: false});
             const list = document.getElementById('admin-list');
             list.innerHTML = ''; let profit = 0;
-            
             agends.forEach(a => {
                 if(a.status === 'Atendido' || a.status === 'Confirmado') profit += parseFloat(a.valor_total);
                 list.innerHTML += `
-                    <div class="p-8 bg-stone-50/50 border border-stone-100 rounded-[2.5rem] shadow-sm hover:shadow-md transition-all">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                            <div>
-                                <span class="status-badge ${a.status==='Atendido'?'bg-green-100 text-green-700':a.status==='Desmarcado'?'bg-red-100 text-red-700':'bg-blue-100 text-blue-700'}">${a.status}</span>
-                                <h4 class="font-bold text-2xl mt-3 text-stone-900 leading-none">${a.cliente_nome}</h4>
-                                <p class="text-sm text-stone-400 mt-2 font-medium italic">${a.servicos_escolhidos}</p>
-                            </div>
-                            <div class="text-left md:text-right">
-                                <p class="font-bold text-stone-900 text-3xl tracking-tighter italic leading-none">R$ ${a.valor_total}</p>
-                                <p class="text-[10px] font-bold text-stone-300 uppercase tracking-widest mt-2">${a.data.split('-').reverse().join('/')} • ${a.horario}</p>
-                            </div>
+                    <div class="glass p-8 rounded-[2rem] flex flex-col md:flex-row justify-between items-center gap-6 shadow-sm border-stone-50">
+                        <div>
+                            <span class="status-badge ${a.status==='Atendido'?'bg-green-100 text-green-700':'bg-blue-100 text-blue-700'}">${a.status}</span>
+                            <h4 class="font-bold text-2xl mt-2">${a.cliente_nome}</h4>
+                            <p class="text-xs text-stone-400 italic">${a.servicos_escolhidos}</p>
                         </div>
-                        <div class="flex flex-wrap gap-2 mt-8 pt-6 border-t border-stone-100/50">
-                            <button onclick="upStat('${a.id}','Confirmado')" class="text-[9px] border px-5 py-3 rounded-xl font-black uppercase tracking-widest hover:bg-white transition-all">Confirmar</button>
-                            <button onclick="upStat('${a.id}','Atendido')" class="text-[9px] bg-green-600 text-white px-5 py-3 rounded-xl font-black uppercase tracking-widest">Atendida</button>
-                            <button onclick="upStat('${a.id}','Desmarcado')" class="text-[9px] bg-red-100 text-red-700 px-5 py-3 rounded-xl font-black uppercase tracking-widest">Desmarcou</button>
-                            <button onclick="sendVIPRemind('${a.cliente_whatsapp}','${a.cliente_nome}','${a.horario}','${a.servicos_escolhidos}')" class="text-[9px] bg-stone-900 text-white px-5 py-3 rounded-xl font-black uppercase tracking-widest ml-auto shadow-lg shadow-black/10">Lembrar Cliente</button>
+                        <div class="flex items-center gap-4">
+                            <span class="font-bold text-2xl italic">R$ ${a.valor_total}</span>
+                            <div class="flex flex-col gap-2">
+                                <button onclick="upStat('${a.id}','Atendido')" class="text-[8px] bg-green-600 text-white px-4 py-2 rounded-lg font-bold uppercase">Finalizar</button>
+                                <button onclick="upStat('${a.id}','Desmarcado')" class="text-[8px] bg-red-100 text-red-600 px-4 py-2 rounded-lg font-bold uppercase">Remover</button>
+                            </div>
                         </div>
                     </div>`;
             });
@@ -307,27 +299,22 @@
             lucide.createIcons();
         }
 
-        window.updateLocation = async () => {
+        window.updateStudioConfig = async () => {
             const endereco = document.getElementById('adm-address').value;
             const link_maps = document.getElementById('adm-maps-link').value;
-            await supabase.from('configs').update({ endereco, link_maps }).eq('id', 1);
-            alert("Studio atualizado!"); location.reload();
+            const { error } = await supabase.from('configs').update({ endereco, link_maps }).eq('id', 1);
+            if(!error) alert("Configurações salvas com sucesso!");
+            location.reload();
         };
 
         window.upStat = async (id, status) => { await supabase.from('agendamentos').update({ status }).eq('id', id); loadDash(); };
-        window.updatePrice = async (id, p) => { await supabase.from('servicos').update({ preco: parseFloat(p) }).eq('id', id); loadServices(); };
         window.addService = async () => { 
             const n = document.getElementById('add-s-name').value; 
-            const p = document.getElementById('add-s-price').value.replace(',','.');
+            const p = document.getElementById('add-s-price').value;
             await supabase.from('servicos').insert([{ nome: n, preco: parseFloat(p) }]); 
             location.reload(); 
         };
         window.deleteService = async (id) => { if(confirm("Excluir?")) { await supabase.from('servicos').delete().eq('id', id); location.reload(); }};
-
-        window.sendVIPRemind = (p, n, h, s) => {
-            const msg = `💎 *CONFIRMAÇÃO - KAYRILEYDE SANTOS*\n\nOlá *${n}*! ✨\nPassando para confirmar que seu momento de beleza está chegando.\n\n⏰ *Horário:* ${h}\n🛠 *Procedimentos:* ${s}\n📍 *Local:* ${studioCfg.endereco}\n\nPodemos confirmar sua vinda para prepararmos tudo com excelência? ✨`;
-            window.open(`https://wa.me/${p.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`);
-        };
 
         init();
     </script>
